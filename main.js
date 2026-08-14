@@ -105,7 +105,7 @@ const GetComputerCard = () => {
 const RenderComputerCard = () => {
   $carteOrdi.innerHTML = null
   //console.log(carteO)
-  console.log(histoTirage)
+  //console.log(histoTirage)
   let template = `
     <div class="carte ${carteO[0][1]}" data-value="${carteO[0][0]}">${carteO[0][0]}</div>
   `
@@ -208,9 +208,11 @@ const CardClick = (e) => {
   if (carte.classList.contains('carte')) {
     //console.log(carte.dataset.value)
     //console.log(carteO[0])
+    //console.log(carte.classList[1])
+    //console.log(carteO[0][1])
 
     // si la valeur de la carte cliquée est la même que celle de la carte de l'ordi
-    if (carte.dataset.value == carteO[0][0]) {
+    if (carte.dataset.value == carteO[0][0] && carte.classList[1] == carteO[0][1]) {
       //console.log("les cartes correspondent")
 
       // on cache la carte utilisée
