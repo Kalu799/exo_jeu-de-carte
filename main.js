@@ -128,7 +128,7 @@ const GetPlayerCards = () => {
     }
   }
   // trie les cartes
-  cartesJ.sort(CompareNumbers)
+  //cartesJ.sort(CompareNumbers)
   //console.log(cartesJ)
 }
 
