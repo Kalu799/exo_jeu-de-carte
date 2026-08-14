@@ -81,8 +81,18 @@ const Start = async () => {
 const GetComputerCard = () => {
   carteO = []
   while (carteO.length < 1) {
-    let carte = GetRandomNumb()
-    if (!histoTirage.includes(carte)) {
+
+    let carteNbre = GetRandomNumb()
+    let carteColor = GetRandomColor()
+
+    const carteExiste = histoTirage.some(carte => {
+      return carte[0] === carteNbre && carte[1] === carteColor
+    })
+
+    if (!carteExiste) {
+
+      const carte = [carteNbre, carteColor]
+
       carteO.push(carte)
       histoTirage.push(carte)
     }
@@ -94,8 +104,10 @@ const GetComputerCard = () => {
 //
 const RenderComputerCard = () => {
   $carteOrdi.innerHTML = null
+  //console.log(carteO)
+  console.log(histoTirage)
   let template = `
-    <div class="carte" data-value="${carteO[0]}">${carteO[0]}</div>
+    <div class="carte ${carteO[0][1]}" data-value="${carteO[0][0]}">${carteO[0][0]}</div>
   `
   $carteOrdi.innerHTML = template
 }
@@ -106,8 +118,9 @@ const RenderComputerCard = () => {
 const RenderPlayerCards = () => {
   $cartesJoueur.innerHTML = null
   cartesJ.forEach(carte => {
+    //console.log(carte)
     let template = `
-      <div class="carte" data-value="${carte}">${carte}</div>
+      <div class="carte ${carte[1]}" data-value="${carte[0]}">${carte[0]}</div>
     `
     $cartesJoueur.innerHTML += template
   })
@@ -121,10 +134,17 @@ const GetPlayerCards = () => {
   cartesJ = []
   // génère un nbre aléatoire pour chaque carte jusqu'à en avoir 5 différentes
   while (cartesJ.length < 5) {
-    let carte = GetRandomNumb()
-    // Vérifie si la carte existe déjà
-    if (!cartesJ.includes(carte)) {
-        cartesJ.push(carte)
+
+    let carteNbre = GetRandomNumb()
+    let carteColor = GetRandomColor()
+
+    // Vérifie si une carte avec le même nombre ET la même couleur existe déjà
+    const carteExiste = cartesJ.some(carte => {
+      return carte[0] === carteNbre && carte[1] === carteColor
+    })
+
+    if (!carteExiste) {
+      cartesJ.push([carteNbre, carteColor])
     }
   }
   // trie les cartes
@@ -144,6 +164,22 @@ function CompareNumbers(a, b) {
 //
 function GetRandomNumb() {
   return Math.floor(Math.random() * 10) + 1
+}
+
+//
+// fct qui génère une couleur aléatoire pour la carte
+//
+function GetRandomColor() {
+  let colorNbre = Math.floor(Math.random() * 2)
+  if (colorNbre === 0) {
+    return ('rouge')
+  }
+  else if (colorNbre === 1) {
+    return ('noire')
+  }
+  else {
+    return ('jsp comment je suis arrivé ici')
+  }
 }
 
 //
@@ -169,12 +205,12 @@ const CardClick = (e) => {
   //console.log(carte)
 
   // si le click est bien sur une carte
-  if(carte.classList.contains('carte')) {
+  if (carte.classList.contains('carte')) {
     //console.log(carte.dataset.value)
     //console.log(carteO[0])
 
     // si la valeur de la carte cliquée est la même que celle de la carte de l'ordi
-    if(carte.dataset.value == carteO[0]) {
+    if (carte.dataset.value == carteO[0][0]) {
       //console.log("les cartes correspondent")
 
       // on cache la carte utilisée
@@ -184,12 +220,12 @@ const CardClick = (e) => {
       // on met à jour l'affichage du score
       ScoreUpdate()
       // on tire une nouvelle carte pour l'ordi et on l'affiche
-      if(points == 5) {
+      if (points == 5) {
         //console.log("vous avez gagné")
         win = true
         Endgame()
       }
-      else if (histoTirage.length < 10) {
+      else if (histoTirage.length < 20) {
         // on tire la première carte de l'ordi
         GetComputerCard()
         // on affiche la carte de l'ordi
@@ -222,7 +258,7 @@ const ScoreUpdate = () => {
 //
 const Skip = async () => {
   //console.log('skip')
-  if(histoTirage.length < 10) {
+  if (histoTirage.length < 20) {
     // on tire la première carte de l'ordi
     await GetComputerCard()
     // on affiche la carte de l'ordi
@@ -243,7 +279,7 @@ const Skip = async () => {
 const Endgame = () => {
 
   // si le joueur a gagné
-  if(win === true) {
+  if (win === true) {
     console.log('win')
     clearInterval(myInterval)
     Hide($skipBtn)
@@ -252,7 +288,7 @@ const Endgame = () => {
   }
 
   // si le joueur a perdu
-  else if(win === false) {
+  else if (win === false) {
     console.log('loose')
     clearInterval(myInterval)
     Hide($skipBtn)
@@ -298,13 +334,13 @@ const Timer = () => {
 }
 
 const Decompte = () => {
-  if(tempsEcoule < 60) {
+  if (tempsEcoule < 60) {
     tempsEcoule = tempsEcoule + 1
     let tempsDisplay = (60 - tempsEcoule)
     //console.log(tempsEcoule)
     $temps.innerText = tempsDisplay
   }
-  else if(tempsEcoule === 60) {
+  else if (tempsEcoule === 60) {
     messageLoose = "Le temps est écoulé."
     win = false
     Endgame()

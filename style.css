@@ -25,6 +25,15 @@ h1,p {
   display: none;
 }
 
+.rouge {
+  background: red;
+}
+
+.noire {
+  background: black;
+  color: white;
+}
+
 /* header */
 
 header {
