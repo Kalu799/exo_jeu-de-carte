@@ -69,6 +69,7 @@ const GetComputerCard = () => {
     let carte = GetRandomNumb()
     if (!histoTirage.includes(carte)) {
       carteO.push(carte)
+      histoTirage.push(carte)
     }
   }
 }
@@ -133,7 +134,7 @@ function CompareNumbers(a, b) {
 // fct qui génère un nbre aléatoire compris entre 1 et 10
 //
 function GetRandomNumb() {
-  return Math.floor(Math.random() * (10 - 1) + 1);
+  return Math.floor(Math.random() * 10) + 1
 }
 
 
@@ -154,15 +155,56 @@ const Show = (e) => {
 
 
 //
+// fct qui s'exec quand on click sur une carte
+//
+const CardClick = (e) => {
+  //console.log('click')
+  const carte = e.target
+  //console.log(carte)
+  if(carte.classList.contains('carte')) {
+    //console.log(carte.dataset.value)
+    //console.log(carteO[0])
+    if(carte.dataset.value == carteO[0]) {
+      console.log("les cartes correspondent")
+    }
+    else {
+      console.log("ce ne sont pas les mêmes cartes")
+    }
+  }
+}
+
+
+//
+// fct qui s'exec quand on click sur 'skip'
+//
+const Skip = async () => {
+  //console.log('skip')
+  if(histoTirage.length < 10) {
+    // on tire la première carte de l'ordi
+    await GetComputerCard()
+    // on affiche la carte de l'ordi
+    await RenderComputerCard()
+    //console.log(histoTirage)
+  }
+  else {
+    console.log('perdu')
+  }
+}
+
+
+//
 // fct qui initialise tout
 //
 const Init = () => {
 
-  // écoute le click sur les cartes
-  //$cartes.addEventListener('click', )
+  // écoute le click sur les cartes du joueur
+  $cartesJoueur.addEventListener('click', CardClick)
 
   // écoute du btn 'start'
   $startBtn.addEventListener('click', Start)
+
+  // écoute du btn 'skip'
+  $skipBtn.addEventListener('click', Skip)
 
 }
 
