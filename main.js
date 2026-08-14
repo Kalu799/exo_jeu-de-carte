@@ -17,6 +17,10 @@ const $cartes = document.querySelectorAll('.carte')
 // points
 const $points = document.querySelector('.points')
 
+// timer
+const $temps = document.querySelector('.temps')
+
+// texte
 const $textes = document.querySelector('.txt')
 
 /**********
@@ -34,6 +38,12 @@ let points = 0
 // si win = true : le joueur a gagné
 // si win = false : le joueur a perdu
 let win = null
+// raison de la défaite
+let messageLoose = null
+// temps écoulé
+let tempsEcoule = 0
+
+let myInterval = null
 
 /**********
 /*  FCT 
@@ -61,6 +71,8 @@ const Start = async () => {
   // on affiche la carte de l'ordi
   await RenderComputerCard()
 
+  // lance le timer
+  Timer()
 }
 
 //
@@ -77,7 +89,6 @@ const GetComputerCard = () => {
   }
 }
 
-
 //
 // fct qui affiche la carte de l'odri
 //
@@ -88,7 +99,6 @@ const RenderComputerCard = () => {
   `
   $carteOrdi.innerHTML = template
 }
-
 
 //
 // fct qui affiche les cartes du joueur
@@ -102,7 +112,6 @@ const RenderPlayerCards = () => {
     $cartesJoueur.innerHTML += template
   })
 }
-
 
 //
 // fct qui tire les 5 cartes du joueur
@@ -121,9 +130,7 @@ const GetPlayerCards = () => {
   // trie les cartes
   cartesJ.sort(CompareNumbers)
   //console.log(cartesJ)
-
 }
-
 
 //
 // fct qui trie les cartes par ordre croissant
@@ -132,14 +139,12 @@ function CompareNumbers(a, b) {
   return a - b;
 }
 
-
 //
 // fct qui génère un nbre aléatoire compris entre 1 et 10
 //
 function GetRandomNumb() {
   return Math.floor(Math.random() * 10) + 1
 }
-
 
 //
 // cache quelque chose
@@ -148,14 +153,12 @@ const Hide = (e) => {
   e.classList.add('hidden')
 }
 
-
 //
 // affiche quelque chose
 //
 const Show = (e) => {
   e.classList.remove('hidden')
 }
-
 
 //
 // fct qui s'exec quand on click sur une carte
@@ -195,17 +198,17 @@ const CardClick = (e) => {
       }
       else {
         //console.log('perdu')
+        messageLoose = "Toutes les cartes ont été tirées."
         win = false
         Endgame()
       }
     }
     else {
       //console.log("ce ne sont pas les mêmes cartes")
-      alert('les cartes ne sont pas identiques')
+      alert("La carte choisie ne correspond pas à celle de l'oridnateur.")
     }
   }
 }
-
 
 //
 // fct qui met à jour l'affichage du score
@@ -213,7 +216,6 @@ const CardClick = (e) => {
 const ScoreUpdate = () => {
   $points.innerText = points
 }
-
 
 //
 // fct qui s'exec quand on click sur 'skip'
@@ -229,11 +231,11 @@ const Skip = async () => {
   }
   else {
     //console.log('perdu')
+    messageLoose = "Toutes les cartes ont été tirées."
     win = false
     Endgame()
   }
 }
-
 
 //
 // fct qui s'exec à la fin du jeu
@@ -243,6 +245,7 @@ const Endgame = () => {
   // si le joueur a gagné
   if(win === true) {
     console.log('win')
+    clearInterval(myInterval)
     Hide($skipBtn)
     Show($replayBtn)
     alert('Bravo ! Vous avez gagné !')
@@ -251,9 +254,10 @@ const Endgame = () => {
   // si le joueur a perdu
   else if(win === false) {
     console.log('loose')
+    clearInterval(myInterval)
     Hide($skipBtn)
     Show($replayBtn)
-    alert('Toutes les cartes ont été tirées. Vous avez perdu.')
+    alert(messageLoose + ' Vous avez perdu.')
   }
 
   else {
@@ -261,7 +265,6 @@ const Endgame = () => {
     alert('Bravo vous avez débloqué une fin alternative ! Comment êtes-vous arrivez ici ?')
   }
 }
-
 
 //
 // fct qui lance le restart de la partie
@@ -275,6 +278,8 @@ const Restart = () => {
   histoTirage = []
   points = 0
   win = null
+  messageLoose = null
+  tempsEcoule = 0
 
   // cache le btn replay
   Hide($replayBtn)
@@ -284,6 +289,27 @@ const Restart = () => {
   Start()
 }
 
+//
+// fcts du timer
+//
+const Timer = () => {
+  $temps.innerText = 60
+  myInterval = setInterval(Decompte, 1000)
+}
+
+const Decompte = () => {
+  if(tempsEcoule < 60) {
+    tempsEcoule = tempsEcoule + 1
+    let tempsDisplay = (60 - tempsEcoule)
+    //console.log(tempsEcoule)
+    $temps.innerText = tempsDisplay
+  }
+  else if(tempsEcoule === 60) {
+    messageLoose = "Le temps est écoulé."
+    win = false
+    Endgame()
+  }
+}
 
 //
 // fct qui initialise tout
