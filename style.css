@@ -1,0 +1,75 @@
+/* Defaut */
+:where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+
+:root {
+  --spacing: 3rem;
+}
+
+/* Reset */
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+h1 {
+  padding: 0;
+  margin: 0;
+}
+
+/* body */
+
+.hidden {
+  display: none;
+}
+
+/* header */
+
+header {
+  background: rgb(0, 255, 98);
+  h1 {
+    padding: var(--spacing);
+    text-align: center;
+  }
+}
+
+/* main */
+
+main {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--spacing);
+  margin-block: var(--spacing);
+}
+
+.carteContainer {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing);
+}
+
+.carte {
+  border: 2px solid rgb(0, 0, 0);
+  padding: var(--spacing);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  text-align: center;
+  padding: var(--spacing);
+  
+  &:hover {
+    cursor: pointer;
+  }
+}
