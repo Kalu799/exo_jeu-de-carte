@@ -19,3 +19,7 @@ Les cartes données sont affichées aléatoirement et plus par ordre croissant.
 ## V4
 
 Il y a maintenant des cartes rouges et noires. On vérifie que la couleur soit identique en plus de la valeur.
+
+## V5 (WIP)
+
+On ne click plus sur la carte pour la valider, on la drag/drop dans une zone centrale.
