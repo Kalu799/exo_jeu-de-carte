@@ -31,6 +31,9 @@ let carteO = []
 let histoTirage = []
 // les points du joueur
 let points = 0
+// si win = true : le joueur a gagné
+// si win = false : le joueur a perdu
+let win = null
 
 /**********
 /*  FCT 
@@ -179,7 +182,9 @@ const CardClick = (e) => {
       ScoreUpdate()
       // on tire une nouvelle carte pour l'ordi et on l'affiche
       if(points == 5) {
-        console.log("vous avez gagné")
+        //console.log("vous avez gagné")
+        win = true
+        Endgame()
       }
       else if (histoTirage.length < 10) {
         // on tire la première carte de l'ordi
@@ -189,11 +194,14 @@ const CardClick = (e) => {
         //console.log(histoTirage)
       }
       else {
-        console.log('perdu')
+        //console.log('perdu')
+        win = false
+        Endgame()
       }
     }
     else {
-      console.log("ce ne sont pas les mêmes cartes")
+      //console.log("ce ne sont pas les mêmes cartes")
+      alert('les cartes ne sont pas identiques')
     }
   }
 }
@@ -220,7 +228,33 @@ const Skip = async () => {
     //console.log(histoTirage)
   }
   else {
-    console.log('perdu')
+    //console.log('perdu')
+    win = false
+    Endgame()
+  }
+}
+
+
+//
+// fct qui s'exec à la fin du jeu
+//
+const Endgame = () => {
+
+  // si le joueur a gagné
+  if(win === true) {
+    console.log('win')
+    alert('Bravo ! Vous avez gagné !')
+  }
+
+  // si le joueur a perdu
+  else if(win === false) {
+    console.log('loose')
+    alert('Vous avez perdu.')
+  }
+
+  else {
+    //console.log('fin alternative')
+    alert('Bravo vous avez débloqué une fin alternative ! Comment êtes-vous arrivez ici ?')
   }
 }
 
