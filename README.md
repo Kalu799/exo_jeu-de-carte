@@ -12,6 +12,6 @@ Le jeu se termine quand l'ordi a tiré les 10 cartes et on peut rejouer.
 
 Ajout d'un timer de 60 secondes. Le jeu s'arrête quand toutes les cartes ont été tirées ou que le timer arrive à 0.
 
-## V3 (WIP)
+## V3
 
 Les cartes données sont affichées aléatoirement et plus par ordre croissant.
