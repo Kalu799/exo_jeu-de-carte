@@ -29,9 +29,16 @@ h1 {
 
 header {
   background: rgb(0, 255, 98);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   h1 {
-    padding: var(--spacing);
-    text-align: center;
+    padding-block-start: var(--spacing);
+  }
+  .score {
+    display: flex;
+    gap: 1rem;
   }
 }
 
@@ -68,7 +75,7 @@ main {
 .btn {
   text-align: center;
   padding: var(--spacing);
-  
+
   &:hover {
     cursor: pointer;
   }
