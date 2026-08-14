@@ -243,19 +243,45 @@ const Endgame = () => {
   // si le joueur a gagné
   if(win === true) {
     console.log('win')
+    Hide($skipBtn)
+    Show($replayBtn)
     alert('Bravo ! Vous avez gagné !')
   }
 
   // si le joueur a perdu
   else if(win === false) {
     console.log('loose')
-    alert('Vous avez perdu.')
+    Hide($skipBtn)
+    Show($replayBtn)
+    alert('Toutes les cartes ont été tirées. Vous avez perdu.')
   }
 
   else {
     //console.log('fin alternative')
     alert('Bravo vous avez débloqué une fin alternative ! Comment êtes-vous arrivez ici ?')
   }
+}
+
+
+//
+// fct qui lance le restart de la partie
+//
+const Restart = () => {
+  //console.log('restart')
+
+  // reset les var avec leurs valeurs par défaut
+  cartesJ = []
+  carteO = []
+  histoTirage = []
+  points = 0
+  win = null
+
+  // cache le btn replay
+  Hide($replayBtn)
+  // update le score
+  ScoreUpdate()
+  // démare une nouvelle partie
+  Start()
 }
 
 
@@ -272,6 +298,9 @@ const Init = () => {
 
   // écoute du btn 'skip'
   $skipBtn.addEventListener('click', Skip)
+
+  // écoute du btn 'skip'
+  $replayBtn.addEventListener('click', Restart)
 
 }
 
