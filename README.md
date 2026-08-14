@@ -15,3 +15,7 @@ Ajout d'un timer de 60 secondes. Le jeu s'arrête quand toutes les cartes ont é
 ## V3
 
 Les cartes données sont affichées aléatoirement et plus par ordre croissant.
+
+## V4 (WIP)
+
+Il y a maintenant des cartes rouges et noires. On vérifie que la couleur soit identique en plus de la valeur.
