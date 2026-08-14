@@ -178,15 +178,15 @@ const CardClick = (e) => {
       // on met à jour l'affichage du score
       ScoreUpdate()
       // on tire une nouvelle carte pour l'ordi et on l'affiche
-      if(histoTirage.length < 10) {
+      if(points == 5) {
+        console.log("vous avez gagné")
+      }
+      else if (histoTirage.length < 10) {
         // on tire la première carte de l'ordi
         GetComputerCard()
         // on affiche la carte de l'ordi
         RenderComputerCard()
         //console.log(histoTirage)
-      }
-      else if (points == 5) {
-        console.log("vous avez gagné")
       }
       else {
         console.log('perdu')
