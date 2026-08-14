@@ -17,12 +17,18 @@ const $cartes = document.querySelectorAll('.carte')
 // points
 const $points = document.querySelector('.points')
 
+const $textes = document.querySelector('.txt')
+
 /**********
 /*  VAR
 **********/
 
 // les cartes du joueur
 let cartesJ = []
+// la carte actuelle de l'ordi
+let carteO = []
+// historique des cartes tirées par l'ordi
+let histoTirage = []
 // les points du joueur
 let points = 0
 
@@ -35,14 +41,48 @@ let points = 0
 //
 const Start = async () => {
 
+  // on cache le btn 'start'
   Hide($startBtn)
+  // on affiche le btn 'skip'
   Show($skipBtn)
+
+  Show($textes)
 
   // on tire les 5 cartes du joueur
   await GetPlayerCards()
   // on affiche les cartes du joueur
   await RenderPlayerCards()
 
+  // on tire la première carte de l'ordi
+  await GetComputerCard()
+  // on affiche la carte de l'ordi
+  await RenderComputerCard()
+
+}
+
+//
+// fct qui tire la carte de l'odri
+//
+const GetComputerCard = () => {
+  carteO = []
+  while (carteO.length < 1) {
+    let carte = GetRandomNumb()
+    if (!histoTirage.includes(carte)) {
+      carteO.push(carte)
+    }
+  }
+}
+
+
+//
+// fct qui affiche la carte de l'odri
+//
+const RenderComputerCard = () => {
+  $carteOrdi.innerHTML = null
+  let template = `
+    <div class="carte" data-value="${carteO[0]}">${carteO[0]}</div>
+  `
+  $carteOrdi.innerHTML = template
 }
 
 
