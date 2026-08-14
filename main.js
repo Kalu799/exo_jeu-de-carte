@@ -161,16 +161,49 @@ const CardClick = (e) => {
   //console.log('click')
   const carte = e.target
   //console.log(carte)
+
+  // si le click est bien sur une carte
   if(carte.classList.contains('carte')) {
     //console.log(carte.dataset.value)
     //console.log(carteO[0])
+
+    // si la valeur de la carte cliquée est la même que celle de la carte de l'ordi
     if(carte.dataset.value == carteO[0]) {
-      console.log("les cartes correspondent")
+      //console.log("les cartes correspondent")
+
+      // on cache la carte utilisée
+      Hide(carte)
+      // on ajoute un point
+      points = (points + 1)
+      // on met à jour l'affichage du score
+      ScoreUpdate()
+      // on tire une nouvelle carte pour l'ordi et on l'affiche
+      if(histoTirage.length < 10) {
+        // on tire la première carte de l'ordi
+        GetComputerCard()
+        // on affiche la carte de l'ordi
+        RenderComputerCard()
+        //console.log(histoTirage)
+      }
+      else if (points == 5) {
+        console.log("vous avez gagné")
+      }
+      else {
+        console.log('perdu')
+      }
     }
     else {
       console.log("ce ne sont pas les mêmes cartes")
     }
   }
+}
+
+
+//
+// fct qui met à jour l'affichage du score
+//
+const ScoreUpdate = () => {
+  $points.innerText = points
 }
 
 
