@@ -84,6 +84,14 @@ main {
   }
 }
 
+.drag.active {
+  opacity: .5;
+}
+
+.drop.active {
+  background-color: silver;
+}
+
 .btnContainer {
   display: flex;
   justify-content: center;

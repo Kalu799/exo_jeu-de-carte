@@ -23,6 +23,9 @@ const $temps = document.querySelector('.temps')
 // texte
 const $textes = document.querySelector('.txt')
 
+// zone pour drop les cartes
+const $drop = document.querySelector('.drop');
+
 /**********
 /*  VAR
 **********/
@@ -42,8 +45,10 @@ let win = null
 let messageLoose = null
 // temps écoulé
 let tempsEcoule = 0
-
+// variable pour le timer
 let myInterval = null
+// variable pour si une carte est drag
+let dragged = null
 
 /**********
 /*  FCT 
@@ -58,7 +63,9 @@ const Start = async () => {
   Hide($startBtn)
   // on affiche le btn 'skip'
   Show($skipBtn)
-
+  // on affiche la zone de drop
+  Show($drop)
+  // on affiche les textes
   Show($textes)
 
   // on tire les 5 cartes du joueur
@@ -120,7 +127,7 @@ const RenderPlayerCards = () => {
   cartesJ.forEach(carte => {
     //console.log(carte)
     let template = `
-      <div class="carte ${carte[1]}" data-value="${carte[0]}">${carte[0]}</div>
+      <div class="carte ${carte[1]} drag" data-value="${carte[0]}" draggable="true">${carte[0]}</div>
     `
     $cartesJoueur.innerHTML += template
   })
@@ -199,52 +206,55 @@ const Show = (e) => {
 //
 // fct qui s'exec quand on click sur une carte
 //
-const CardClick = (e) => {
-  //console.log('click')
-  const carte = e.target
-  //console.log(carte)
+const CardClick = (carte) => {
 
-  // si le click est bien sur une carte
-  if (carte.classList.contains('carte')) {
-    //console.log(carte.dataset.value)
-    //console.log(carteO[0])
-    //console.log(carte.classList[1])
-    //console.log(carteO[0][1])
+  // récupère les informations de la carte
+  const carteNbre = Number(carte.dataset.value)
+  const carteColor = carte.classList.contains('rouge')
+    ? 'rouge'
+    : 'noire'
 
-    // si la valeur de la carte cliquée est la même que celle de la carte de l'ordi
-    if (carte.dataset.value == carteO[0][0] && carte.classList[1] == carteO[0][1]) {
-      //console.log("les cartes correspondent")
+  // vérifie si la carte correspond à celle de l'ordinateur
+  if (
+    carteNbre === carteO[0][0] &&
+    carteColor === carteO[0][1]
+  ) {
 
-      // on cache la carte utilisée
-      Hide(carte)
-      // on ajoute un point
-      points = (points + 1)
-      // on met à jour l'affichage du score
-      ScoreUpdate()
-      // on tire une nouvelle carte pour l'ordi et on l'affiche
-      if (points == 5) {
-        //console.log("vous avez gagné")
-        win = true
-        Endgame()
-      }
-      else if (histoTirage.length < 20) {
-        // on tire la première carte de l'ordi
-        GetComputerCard()
-        // on affiche la carte de l'ordi
-        RenderComputerCard()
-        //console.log(histoTirage)
-      }
-      else {
-        //console.log('perdu')
-        messageLoose = "Toutes les cartes ont été tirées."
-        win = false
-        Endgame()
-      }
+    console.log("Les cartes correspondent")
+
+    // on cache la carte utilisée
+    Hide(carte)
+
+    // on ajoute un point
+    points = points + 1
+
+    // on met à jour l'affichage du score
+    ScoreUpdate()
+
+    // on tire une nouvelle carte
+    if (points === 5) {
+      win = true
+      Endgame()
     }
+
+    else if (histoTirage.length < 20) {
+      GetComputerCard()
+      RenderComputerCard()
+    }
+
     else {
-      //console.log("ce ne sont pas les mêmes cartes")
-      alert("La carte choisie ne correspond pas à celle de l'oridnateur.")
+      messageLoose = "Toutes les cartes ont été tirées."
+      win = false
+      Endgame()
     }
+
+    return true
+  }
+
+  // mauvaise carte
+  else {
+    alert("La carte choisie ne correspond pas à celle de l'ordinateur.")
+    return false
   }
 }
 
@@ -354,18 +364,51 @@ const Decompte = () => {
 //
 const Init = () => {
 
-  // écoute le click sur les cartes du joueur
-  $cartesJoueur.addEventListener('click', CardClick)
+  // 
+  // Drag & drop
+  // 
 
-  // écoute du btn 'start'
+  // début du drag
+  $cartesJoueur.addEventListener('dragstart', e => {
+    if (e.target.classList.contains('drag')) {
+      dragged = e.target
+      dragged.classList.add('active')
+      e.dataTransfer.effectAllowed = "move"
+    }
+  })
+
+  // autorise le drop
+  $drop.addEventListener('dragover', e => {
+    e.preventDefault()
+    $drop.classList.add('active')
+  })
+
+  // quitte la zone
+  $drop.addEventListener('dragleave', e => {
+    $drop.classList.remove('active')
+  })
+
+  // drop
+  $drop.addEventListener('drop', e => {
+    e.preventDefault()
+    $drop.classList.remove('active')
+    if (!dragged) return
+    const bonneCarte = CardClick(dragged)
+    if (!bonneCarte) {
+      $cartesJoueur.appendChild(dragged)
+    }
+    dragged.classList.remove('active')
+    dragged = null
+  })
+
+
+  // 
+  // Boutons
+  // 
+
   $startBtn.addEventListener('click', Start)
-
-  // écoute du btn 'skip'
   $skipBtn.addEventListener('click', Skip)
-
-  // écoute du btn 'skip'
   $replayBtn.addEventListener('click', Restart)
-
 }
 
 Init()
